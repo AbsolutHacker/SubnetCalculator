@@ -35,7 +35,7 @@ def cidr_mask_to_bitfield(cidr_mask: int):
     return truncated_mask
 
 def bitfield_to_cidr_mask(bitfield: int):
-    negated_bitfield = ~bitfield
+    negated_bitfield = ~bitfield & 0xFFFFFFFF
     ones = 0
     while negated_bitfield & 0x1 == 0x1:
         ones += 1
