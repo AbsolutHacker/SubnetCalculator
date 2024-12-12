@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Anforderungskriterien:
 # Die maximale Anzahl der zur Verfügung stehenden IP-Adressen und die davon abhängigen Host-Adressen müssen
 # dargestellt werden
@@ -14,6 +16,8 @@ TBLUE =  '\033[44m' # Blue highlighter
 ENDC = '\033[m' # Reset color
 
 def dotted_decimal_to_bitfield(string: str):
+    # wir kopieren hier in eine vor-genullte Liste, um die Angabe "unvollständiger"
+    # Adressen zu unterstützen, z.B. 10/8
     result = [0, 0, 0, 0]
     octets = [ int(octet) for octet in string.split('.') ]
     i = 0
@@ -74,14 +78,17 @@ else:
 nwad = addr & mask
 bcad = nwad | (~mask)
 cidr_mask = bitfield_to_cidr_mask(mask)
+host_bits = 32 - cidr_mask
 
 print('\nDie Adressen in Übersicht:')
 print('\nDie IP-Adresse: ' + bitfield_to_dotted_decimal(addr) + '/' + str(cidr_mask))
 print('Binär: ' + bitfield_to_binary(addr, cidr_mask))
 print('Die Subnetzmaske: ' + bitfield_to_dotted_decimal(mask))
 print('Binär: ' + bitfield_to_binary(mask, cidr_mask))
-print('Die Netzadresse: ' + bitfield_to_dotted_decimal(nwad))
+print('Die Netzadresse: ' + bitfield_to_dotted_decimal(nwad) + '/' + str(cidr_mask))
 print('Binär: ' + bitfield_to_binary(nwad, cidr_mask))
 print('Die Broadcastadresse: ' + bitfield_to_dotted_decimal(bcad))
 print('Binär: ' + bitfield_to_binary(bcad, cidr_mask))
 
+print('\n' + TGREEN + str(cidr_mask) + ' Netz-Bits,' + ENDC + ' ' + TBLUE + str(host_bits) + ' Host-Bits' + ENDC)
+print(str(2**host_bits) + ' Adressen insgesamt, davon ' + str((2**host_bits) - 2) + ' für Hosts verfügbar')
