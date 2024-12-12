@@ -8,3 +8,6 @@
 # die Umrechnung erfolgt grafisch nachvollziehbar und nur mit Hilfe von Grundrechenarten (ggf. modulo und Potenzrechnung).
 # Es soll keine Makro-Programmierung unter Excel stattfinden oder unter Python keine (Fremd-) Bibliotheken eingesetzt werden.
 # Netzwerk- und Hostanteil müssen durch farbige Hinterlegung der Bits grafisch deutlich werden
+
+inputIP = input('Bitte geben sie die IP Adresse ein ')
+inputMask = input('bitte geben sie die Subnetzmaske ein ')
