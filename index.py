@@ -9,9 +9,10 @@
 # Es soll keine Makro-Programmierung unter Excel stattfinden oder unter Python keine (Fremd-) Bibliotheken eingesetzt werden.
 # Netzwerk- und Hostanteil müssen durch farbige Hinterlegung der Bits grafisch deutlich werden
 
-inputIP = input('Bitte geben sie die IP Adresse ein ')
-inputMask = input('bitte geben sie die Subnetzmaske ein ')
+input_ip = input('Bitte geben sie die IP Adresse ein ')
+input_mask = input('bitte geben sie die Subnetzmaske ein ')
 
+print('Wir teilen die IP Adresse in ihre Oktette auf diese sehen dann so aus')
 def dotted_decimal_to_bitfield(string: str):
     result = [0, 0, 0, 0]
     octets = [ int(octet) for octet in string.split('.') ]
@@ -27,19 +28,19 @@ def bitfield_to_dotted_decimal(bitfield: int):
     octets = [ int((bitfield >> 24) & 0xFF), int((bitfield >> 16) & 0xFF), int((bitfield >> 8) & 0xFF), int(bitfield & 0xFF) ]
     return '.'.join(map(str, octets))
 
-addr = dotted_decimal_to_bitfield(inputIP)
+addr = dotted_decimal_to_bitfield(input_ip)
 
-if '.' in inputMask:
-    mask = dotted_decimal_to_bitfield(inputMask)
+if '.' in input_mask:
+    mask = dotted_decimal_to_bitfield(input_mask)
 else:
     # TODO: das noch richtig machen
-    mask = -1 << (32 - int(inputMask))
+    mask = -1 << (32 - int(input_mask))
 
 nwad = addr & mask
 bcad = nwad | (~mask)
 
-print(bitfield_to_dotted_decimal(addr))
-print(bitfield_to_dotted_decimal(mask))
-print(bitfield_to_dotted_decimal(nwad))
-print(bitfield_to_dotted_decimal(bcad))
+print('Die IP-Adresse: ' + bitfield_to_dotted_decimal(addr))
+print('Die Subnetzmaske: ' + bitfield_to_dotted_decimal(mask))
+print('Die Netadresse: ' + bitfield_to_dotted_decimal(nwad))
+print('Die Brodcastadresse: ' + bitfield_to_dotted_decimal(bcad))
 
