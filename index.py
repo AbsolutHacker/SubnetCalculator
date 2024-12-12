@@ -12,7 +12,7 @@
 input_ip = input('Bitte geben sie die IP Adresse ein ')
 input_mask = input('bitte geben sie die Subnetzmaske ein ')
 
-print('Wir teilen die IP Adresse in ihre Oktette auf diese sehen dann so aus')
+print('\nWir teilen die IP Adresse in ihre Oktette auf diese sehen dann so aus')
 def dotted_decimal_to_bitfield(string: str):
     result = [0, 0, 0, 0]
     octets = [ int(octet) for octet in string.split('.') ]
@@ -29,6 +29,7 @@ def bitfield_to_dotted_decimal(bitfield: int):
     return '.'.join(map(str, octets))
 
 addr = dotted_decimal_to_bitfield(input_ip)
+print('\nBinärewer der Ip Adresse: ' + str(dotted_decimal_to_bitfield(input_ip)))
 
 if '.' in input_mask:
     mask = dotted_decimal_to_bitfield(input_mask)
@@ -38,8 +39,8 @@ else:
 
 nwad = addr & mask
 bcad = nwad | (~mask)
-
-print('Die IP-Adresse: ' + bitfield_to_dotted_decimal(addr))
+print('\nDie Adressen in Überischt:')
+print('\nDie IP-Adresse: ' + bitfield_to_dotted_decimal(addr))
 print('Die Subnetzmaske: ' + bitfield_to_dotted_decimal(mask))
 print('Die Netadresse: ' + bitfield_to_dotted_decimal(nwad))
 print('Die Brodcastadresse: ' + bitfield_to_dotted_decimal(bcad))
