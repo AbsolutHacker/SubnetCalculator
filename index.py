@@ -13,10 +13,6 @@ TGREEN =  '\033[42m' # Green text
 TBLUE =  '\033[44m' # Blue highlighter
 ENDC = '\033[m' # Reset color
 
-input_ip = input('Bitte geben sie die IP Adresse ein: ')
-input_mask = input('Bitte geben sie die Subnetzmaske ein: ')
-
-print('\nWir teilen die IP Adresse in ihre Oktette auf diese sehen dann so aus')
 def dotted_decimal_to_bitfield(string: str):
     result = [0, 0, 0, 0]
     octets = [ int(octet) for octet in string.split('.') ]
@@ -28,6 +24,20 @@ def dotted_decimal_to_bitfield(string: str):
         i += 1
     return (result[0] << 24) + (result[1] << 16) + (result[2] << 8) + result[3]
 
+def cidr_mask_to_bitfield(cidr_mask: int):
+    all_ones = int(-1)
+    mask = all_ones << (32 - cidr_mask)
+    truncated_mask = mask & 0xFFFFFFFF
+    return truncated_mask
+
+def bitfield_to_cidr_mask(bitfield: int):
+    negated_bitfield = ~bitfield
+    ones = 0
+    while negated_bitfield & 0x1 == 0x1:
+        ones += 1
+        negated_bitfield = negated_bitfield >> 1
+    return 32 - ones
+
 def bitfield_to_dotted_decimal(bitfield: int):
     octets = [ int((bitfield >> 24) & 0xFF), int((bitfield >> 16) & 0xFF), int((bitfield >> 8) & 0xFF), int(bitfield & 0xFF) ]
     return '.'.join(map(str, octets))
@@ -36,7 +46,6 @@ def bitfield_to_binary(bitfield: int, highlight_bits: int = -1):
     output = ''
     for i in range(0, 32):
         if i < highlight_bits:
-            # TODO: färben
             output += TGREEN
         else:
             output += TBLUE
@@ -46,21 +55,33 @@ def bitfield_to_binary(bitfield: int, highlight_bits: int = -1):
             output += '.'
     return output + ENDC
 
+# -------- MAIN --------
+
+input_ip = input('Bitte geben Sie die IP-Adresse ein: ')
+
+if '/' in input_ip:
+    input_ip, input_mask = input_ip.split('/')
+else:
+    input_mask = input('Bitte geben Sie die Subnetzmaske ein: ')
+
 addr = dotted_decimal_to_bitfield(input_ip)
-print('\nBinärewer der Ip Adresse: ' + str(dotted_decimal_to_bitfield(input_ip)))
 
 if '.' in input_mask:
     mask = dotted_decimal_to_bitfield(input_mask)
 else:
-    # TODO: das noch richtig machen
-    mask = -1 << (32 - int(input_mask))
+    mask = cidr_mask_to_bitfield(int(input_mask))
 
 nwad = addr & mask
 bcad = nwad | (~mask)
+cidr_mask = bitfield_to_cidr_mask(mask)
+
 print('\nDie Adressen in Übersicht:')
-print('\nDie IP-Adresse: ' + bitfield_to_dotted_decimal(addr))
-print('Binär: ')
+print('\nDie IP-Adresse: ' + bitfield_to_dotted_decimal(addr) + '/' + str(cidr_mask))
+print('Binär: ' + bitfield_to_binary(addr, cidr_mask))
 print('Die Subnetzmaske: ' + bitfield_to_dotted_decimal(mask))
+print('Binär: ' + bitfield_to_binary(mask, cidr_mask))
 print('Die Netzadresse: ' + bitfield_to_dotted_decimal(nwad))
+print('Binär: ' + bitfield_to_binary(nwad, cidr_mask))
 print('Die Broadcastadresse: ' + bitfield_to_dotted_decimal(bcad))
+print('Binär: ' + bitfield_to_binary(bcad, cidr_mask))
 
