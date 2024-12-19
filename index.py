@@ -56,7 +56,7 @@ def bitfield_to_binary(bitfield: int, highlight_bits: int = -1):
         offset = 31 - i
         output += str((bitfield >> offset) & 0x1)
         if offset % 8 == 0 and offset > 0:
-            output += '.'
+            output += ENDC + '.'
     return output + ENDC
 
 # -------- MAIN --------
