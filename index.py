@@ -6,6 +6,8 @@
 
 TGREEN =  '\033[42m' # Green text
 TBLUE =  '\033[44m' # Blue highlighter
+BOLD = '\033[1m' # Bold face
+ENDB = '\033[0m' # Reset color
 ENDC = '\033[m' # Reset color
 
 # Umrechnung von dezimaler Punktnoation in Bitwerte
@@ -83,14 +85,28 @@ host_bits = 32 - cidr_mask # Ermitteln der Hostbits
 
 # Auführen der Funktionen und Ausgabe der Ergebnisse
 print('\nDie Adressen in Übersicht:')
+
 print('\nDie IP-Adresse: ' + bitfield_to_dotted_decimal(addr) + '/' + str(cidr_mask))
 print('Binär: ' + bitfield_to_dotted_binary(addr, cidr_mask))
-print('Die Subnetzmaske: ' + bitfield_to_dotted_decimal(mask))
+
+print('\nDie Subnetzmaske: ' + bitfield_to_dotted_decimal(mask))
 print('Binär: ' + bitfield_to_dotted_binary(mask, cidr_mask))
-print('Die Netzadresse: ' + bitfield_to_dotted_decimal(nwad) + '/' + str(cidr_mask))
-print('Binär: ' + bitfield_to_dotted_binary(nwad, cidr_mask))
-print('Die Broadcastadresse: ' + bitfield_to_dotted_decimal(bcad))
-print('Binär: ' + bitfield_to_dotted_binary(bcad, cidr_mask))
+
+print('\n' + BOLD + 'Berechnung Netz-Adresse\n' + ENDC)
+print('Adresse ' + bitfield_to_dotted_binary(addr, cidr_mask))
+print('                  - UND -')
+print('  SNM   ' + bitfield_to_dotted_binary(mask, cidr_mask))
+print('===========================================')
+print('  Netz  ' + bitfield_to_dotted_binary(nwad, cidr_mask))
+print('\nDie Netzadresse: ' + bitfield_to_dotted_decimal(nwad) + '/' + str(cidr_mask))
+
+print('\n' + BOLD + 'Berechnung Broadcast-Adresse\n' + ENDC)
+print('Adresse ' + bitfield_to_dotted_binary(addr, cidr_mask))
+print('                 - ODER -')
+print('  ~SNM  ' + bitfield_to_dotted_binary(~mask, cidr_mask))
+print('===========================================')
+print('   BC   ' + bitfield_to_dotted_binary(bcad, cidr_mask))
+print('\nDie Broadcastadresse: ' + bitfield_to_dotted_decimal(bcad))
 
 print('\n' + TGREEN + str(cidr_mask) + ' Netz-Bits,' + ENDC + ' ' + TBLUE + str(host_bits) + ' Host-Bits' + ENDC)
 print(str(2**host_bits) + ' Adressen insgesamt, davon ' + str((2**host_bits) - 2) + ' für Hosts verfügbar')
