@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-# Anforderungskriterien:
-# die Umrechnung erfolgt grafisch nachvollziehbar und nur mit Hilfe von Grundrechenarten (ggf. modulo und Potenzrechnung).
-# TO-DO: Wäre noch zu klären ob das so gegeben ist.
-
 TGREEN =  '\033[42m' # Green text
 TBLUE =  '\033[44m' # Blue highlighter
 BOLD = '\033[1m' # Bold face
