@@ -58,7 +58,12 @@ def bitfield_to_dotted_binary(bitfield: int, highlight_bits: int = -1):
 
 # -------- MAIN --------
 
-input_ip = input('Bitte geben Sie die IP-Adresse ein: ')
+import sys
+
+if len(sys.argv) > 1:
+    input_ip = sys.argv[1]
+else:
+    input_ip = input('Bitte geben Sie die IP-Adresse ein: ')
 
 # Überprüfung ob Maske direkt in IP-Adresse mitgeben, falls nicht Abfrage der Maske
 if '/' in input_ip:
